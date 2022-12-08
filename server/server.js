@@ -20,11 +20,13 @@ const userKeys = {};
 
 const protoDescriptor = grpc.loadPackageDefinition(packageDefinition);
 
-const getTime = function () {
+const getTime = function (_, callback) {
   const time = new Date().toISOString();
-  return {
+  const res = {
     current_time: time,
   };
+
+  callback(null, res);
 };
 
 const getHash = function (user) {
