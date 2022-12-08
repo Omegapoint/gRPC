@@ -6,7 +6,7 @@ const protoFile =
   import.meta.url.substring(
     "file://".length,
     import.meta.url.lastIndexOf("/")
-  ) + "/../workshop.proto";
+  ) + "/workshop.proto";
 
 const packageDefinition = protoLoader.loadSync(protoFile, {
   keepCase: true,
@@ -50,6 +50,8 @@ server.addService(protoDescriptor.OmegapointServer.service, {
   GetSecretMessage: getHash,
 });
 
-server.bindAsync("0.0.0.0:1337", grpc.ServerCredentials.createInsecure(), () =>
+server.bindAsync("0.0.0.0:1337", grpc.ServerCredentials.createInsecure(), () => 
+{
+  console.log("Listening on port 1337");
   server.start()
-);
+});

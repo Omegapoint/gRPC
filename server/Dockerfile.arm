@@ -1,0 +1,12 @@
+FROM --platform=arm64 node:16
+
+WORKDIR /app
+
+COPY package*.json ./
+
+COPY server.js workshop.proto ./
+
+EXPOSE 1337
+
+# How to lazily build arm64 image on x64 without buildx (lol)
+CMD [ "npm", "ci", "&&", "node", "server.js" ]
