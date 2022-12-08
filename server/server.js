@@ -50,8 +50,11 @@ server.addService(protoDescriptor.OmegapointServer.service, {
   GetSecretMessage: getHash,
 });
 
-server.bindAsync("0.0.0.0:1337", grpc.ServerCredentials.createInsecure(), () => 
-{
-  console.log("Listening on port 1337");
-  server.start()
-});
+server.bindAsync(
+  "0.0.0.0:1337",
+  grpc.ServerCredentials.createInsecure(),
+  () => {
+    console.log("Listening on port 1337");
+    server.start();
+  }
+);
