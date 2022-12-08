@@ -18,10 +18,11 @@ const packageDefinition = protoLoader.loadSync(protoFile, {
 const protoDescriptor = grpc.loadPackageDefinition(packageDefinition);
 
 const client = new protoDescriptor.OmegapointServer(
-  "localhost:1337",
+  "grpc.larssonoliver.com",
   grpc.credentials.createInsecure()
 );
 
 client.GetTime({}, function (err, resp) {
-  console.log(resp.current_time);
+  console.log(err);
+  console.log(resp);
 });
