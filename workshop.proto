@@ -1,1 +1,25 @@
-server/workshop.proto
+syntax = "proto3";
+
+message TimeRequest {}
+message TimeResponse { string currentTime = 1; }
+
+message GetSecretRequest { string user = 1; }
+message GetSecretResponse { string secret = 1; }
+
+message GetSecretDataRequest {
+    string user = 1;
+    string key = 2;
+}
+
+message GetSecretDataResponse {
+  bool keyIsCorrect = 1;
+  optional string data = 2;
+}
+
+service WorkshopService {
+  // Get current time in ISO 8601 format.
+  rpc GetCurrentTime(TimeRequest) returns (TimeResponse) {}
+
+  rpc GetSecret(GetSecretRequest) returns (GetSecretResponse) {}
+  rpc GetSecretData(GetSecretDataRequest) returns (GetSecretDataResponse) {}
+}

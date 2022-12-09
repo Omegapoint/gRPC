@@ -9,7 +9,7 @@ const protoFile =
   import.meta.url.substring(
     "file://".length,
     import.meta.url.lastIndexOf("/")
-  ) + "/workshop.proto";
+  ) + "/../workshop.proto";
 
 const packageDefinition = protoLoader.loadSync(protoFile, {
   keepCase: true,
