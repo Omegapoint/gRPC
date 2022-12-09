@@ -18,7 +18,7 @@ const packageDefinition = protoLoader.loadSync(protoFile, {
 const protoDescriptor = grpc.loadPackageDefinition(packageDefinition);
 
 const client = new protoDescriptor.WorkshopService(
-  "172.16.100.27:1337",
+  "grpc.larssonoliver.com:2337",
   grpc.credentials.createInsecure()
 );
 
