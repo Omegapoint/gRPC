@@ -3,6 +3,7 @@ import protoLoader from "@grpc/proto-loader";
 import crypto from "crypto";
 
 const port = 1337;
+const data = "aHR0cHM6Ly9pLmt5bS1jZG4uY29tL2VudHJpZXMvaWNvbnMvb3JpZ2luYWwvMDAwLzAyOC8yMzAvZnJlZGFnLmpwZw==";
 
 const protoFile =
   import.meta.url.substring(
@@ -18,56 +19,62 @@ const packageDefinition = protoLoader.loadSync(protoFile, {
   oneofs: true,
 });
 
-const userKeys = {};
-
 const protoDescriptor = grpc.loadPackageDefinition(packageDefinition);
 
-const getTime = function (_, callback) {
+const getTime = function(_, callback) {
   const time = new Date().toISOString();
   const res = {
-    current_time: time,
+    currentTime: time,
   };
 
   callback(null, res);
 };
 
-const getHash = function (call, callback) {
+const userKeys = {};
+
+const getSecret = function(call, callback) {
   const user = call.request.user;
   let data = undefined;
 
   if (!userKeys.keys().includes(user)) {
-    data = Math.random().toString(36).slice(3, 7);
+    data = Math.random().toString(36).slice(2, 5);
+    data = crypto.createHash("md5").update(data).digest("hex");
     userKeys[user] = data;
   } else {
     data = userKeys[user];
   }
 
-  callback(null, {
-    key: crypto.createHash("md5").update(data).digest("hex"),
-    user: user,
-  });
+  const res = {
+    secret: data,
+  };
+
+  callback(null, res);
 };
 
-const hasKey = function (call, callback) {
+const secretData = function(call, callback) {
   const tryKey = call.request.key;
+  const user = call.request.user;
 
-  if (false === true /* wrong key */) {
-    call.close();
-  } else {
-    callback(null, {
-      message: Buffer.from(
-        "REVUIMOEUiBGUkVEQUcgTUlOQSBCRUtBTlRBCg==",
-        "base64"
-      ),
-    });
+  const res = {
+    keyIsCorrect: false,
+    data: null,
+  };
+
+  if (crypto.createHash("md5").update(tryKey).digest("hex") === userKeys[user]) {
+    console.log(`User ${user} have solved the secret hash! Their password was ${tryKey}`);
+    res.keyIsCorrect = true;
+    res.data = window.atob(data);
   }
+
+  callback(null, res);
 };
 
 const server = new grpc.Server();
 
-server.addService(protoDescriptor.OmegapointServer.service, {
-  GetTime: getTime,
-  GetSecretMessage: getHash,
+server.addService(protoDescriptor.WorkshopService.service, {
+  GetCurrentTime: getTime,
+  GetSecretMessage: getSecret,
+  GetSecretData: secretData
 });
 
 server.bindAsync(

@@ -17,12 +17,12 @@ const packageDefinition = protoLoader.loadSync(protoFile, {
 
 const protoDescriptor = grpc.loadPackageDefinition(packageDefinition);
 
-const client = new protoDescriptor.OmegapointServer(
+const client = new protoDescriptor.WorkshopService(
   "172.16.100.27:1337",
   grpc.credentials.createInsecure()
 );
 
-client.GetTime({}, function (err, resp) {
+client.GetCurrentTime({}, function (err, resp) {
   console.log(err);
   console.log(resp);
 });
