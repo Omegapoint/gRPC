@@ -85,7 +85,7 @@ task helloWorldServer(type: CreateStartScripts) {
 }
 
 task helloWorldClient(type: CreateStartScripts) {
-    mainClass = 'io.grpc.examples.helloworld.HelloWorldClient'
+    mainClass = 'io.grpc.examples.Main'
     applicationName = 'hello-world-client'
     outputDir = new File(project.buildDir, 'tmp/scripts/' + name)
     classpath = startScripts.classpath

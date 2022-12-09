@@ -1,31 +1,25 @@
 syntax = "proto3";
-package Omegapoint;
+
 message TimeRequest {}
+message TimeResponse { string currentTime = 1; }
 
-message TimeResponse { string current_time = 1; }
+message GetSecretRequest { string user = 1; }
+message GetSecretResponse { string secret = 1; }
 
-message SecretMessage {
-  string key = 1;
-
-  // Used to determine who got the correct key first.
-  string user = 2;
+message GetSecretDataRequest {
+  string user = 1;
+  string key = 2;
 }
 
-message UserSecret { string user = 1; }
-// message SecretResponse {
-//   bool key_is_correct = 1;
-//   string response = 2;
-// }
+message GetSecretDataResponse {
+  bool keyIsCorrect = 1;
+  optional string data = 2;
+}
 
-message SecretKey { int32 key = 1; }
+service WorkshopService {
+  // Get current time in ISO 8601 format.
+  rpc GetCurrentTime(TimeRequest) returns (TimeResponse) {}
 
-message SuccessfullMessage { string message = 1; }
-
-service OmegapointServer {
-  rpc GetTime(TimeRequest) returns (TimeResponse) {}
-  rpc StreamTime(TimeRequest) returns (stream TimeResponse) {}
-  rpc GetSecretMessage(UserSecret) returns (SecretMessage) {
-  } // Send user  -> Get a (hashed) key
-  rpc AccessSecret(SecretKey) returns (SuccessfullMessage) {
-  } // Send key   -> (if correct) get success!
+  rpc GetSecret(GetSecretRequest) returns (GetSecretResponse) {}
+  rpc GetSecretData(GetSecretDataRequest) returns (GetSecretDataResponse) {}
 }
