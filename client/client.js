@@ -18,7 +18,7 @@ const packageDefinition = protoLoader.loadSync(protoFile, {
 const protoDescriptor = grpc.loadPackageDefinition(packageDefinition);
 
 const client = new protoDescriptor.OmegapointServer(
-  "grpc.larssonoliver.com",
+  "172.16.100.27:1337",
   grpc.credentials.createInsecure()
 );
 
