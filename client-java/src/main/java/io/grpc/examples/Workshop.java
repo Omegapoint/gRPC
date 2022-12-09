@@ -28,7 +28,7 @@ public final class Workshop {
     private TimeRequest(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-    private TimeRequest() {
+    TimeRequest() {
     }
 
     @Override

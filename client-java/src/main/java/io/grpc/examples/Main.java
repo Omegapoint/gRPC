@@ -1,12 +1,16 @@
 package io.grpc.examples;
 
 
+import io.grpc.ManagedChannel;
+import io.grpc.ManagedChannelBuilder;
 
 public class Main {
     public static void main(String[] args){
-
-        //ManagedChannel channel = ManagedChannelBuilder.forAddress("ADDRESS", "PORTNR").usePlaintext().build();
-        //OmegapointServerGrpc.OmegapointServerBlockingStub x = OmegapointServerGrpc.newBlockingStub(channel);
-        //System.out.println(x.getTime(Workshop.TimeRequest.newBuilder().build()));
+        //Skapa en channel mot en server
+        ManagedChannel channel = ManagedChannelBuilder.forAddress("grpc.larssonoliver.com", 2337).usePlaintext().build();
+        //skapa en stub mot server
+        WorkshopServiceGrpc.WorkshopServiceBlockingStub x = WorkshopServiceGrpc.newBlockingStub(channel);
+        //nå servern via stubben och hämta svaren
+        System.out.println(x.getCurrentTime(new Workshop.TimeRequest()).getCurrentTime());
     }
 }
