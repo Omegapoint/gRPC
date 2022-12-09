@@ -36,7 +36,7 @@ const getSecret = function(call, callback) {
   const user = call.request.user;
   let data = undefined;
 
-  if (!userKeys.keys().includes(user)) {
+  if (!Object.keys(userKeys).includes(user)) {
     data = Math.random().toString(36).slice(2, 5);
     data = crypto.createHash("md5").update(data).digest("hex");
     userKeys[user] = data;
@@ -63,7 +63,7 @@ const secretData = function(call, callback) {
   if (crypto.createHash("md5").update(tryKey).digest("hex") === userKeys[user]) {
     console.log(`User ${user} have solved the secret hash! Their password was ${tryKey}`);
     res.keyIsCorrect = true;
-    res.data = window.atob(data);
+    res.data = atob(data);
   }
 
   callback(null, res);
@@ -73,7 +73,7 @@ const server = new grpc.Server();
 
 server.addService(protoDescriptor.WorkshopService.service, {
   GetCurrentTime: getTime,
-  GetSecretMessage: getSecret,
+  GetSecret: getSecret,
   GetSecretData: secretData
 });
 
